@@ -1,0 +1,15 @@
+{
+    "presets": [
+        "next/babel"
+    ],
+    "plugins": [
+        [
+            "babel-plugin-styled-components", 
+            {
+                "fileName": false,
+                "pure": true,
+                "namespace": "OCW"
+            }
+        ]
+    ]
+}

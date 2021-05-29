@@ -1,0 +1,5 @@
+export const LIGHT = '#f7f7f7'
+export const DARK = '#4d4d4d'
+export const BROWN = 'rgba(167,143, 119, 10%)'
+export const GREEN = 'rgba(143, 167, 119, 20%'
+export const SHADOW = '#ededed'
