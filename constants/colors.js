@@ -1,5 +1,8 @@
-export const LIGHT = '#f7f7f7'
-export const DARK = '#4d4d4d'
-export const BROWN = 'rgba(167,143, 119, 10%)'
-export const GREEN = 'rgba(143, 167, 119, 20%'
-export const SHADOW = '#ededed'
+export const LIGHT = "#f7f7f7"
+export const DARK = "#4d4d4d"
+export const GREEN = "rgba(143, 167, 119, 20%"
+export const SHADOW = "#ededed"
+export const GREY = "grey"
+export const BROWN = "#a78f77"
+export const TEAK = "#deb887"
+export const CREAM = "beige"

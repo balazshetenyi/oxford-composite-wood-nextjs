@@ -4,7 +4,8 @@ import { Header } from "../components"
 import { ShopContext } from "../context/shopContext"
 
 export function HeaderContainer() {
-	const { cart } = useContext(ShopContext)
+	// const { cart } = useContext(ShopContext)
+	const cart = {}
 	const isCartEmpty = true
 	const [isDroppedDown, setIsDroppedDown] = useState(false)
 	const [searchTerm, setSearchTerm] = useState("")

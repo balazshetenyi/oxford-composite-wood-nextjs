@@ -1,5 +1,6 @@
 import styled from "styled-components"
-import { LIGHT, DARK } from "../../../constants/colors"
+import Image from "next/image"
+import { LIGHT, DARK, GREY, TEAK, CREAM, BROWN } from "../../../constants/colors"
 
 export const Container = styled.section`
 	max-width: 1200px;
@@ -47,14 +48,14 @@ export const ImageContainer = styled.div`
 	height: 700px;
 	display: ${({ showOnSmallScreen }) => showOnSmallScreen && "none"};
 
-	& img.imageLarge {
+	& > .imageLarge {
 		-webkit-box-shadow: 5px 4px 10px 0px rgba(143, 143, 143, 1);
 		-moz-box-shadow: 5px 4px 10px 0px rgba(143, 143, 143, 1);
 		box-shadow: 5px 4px 10px 0px rgba(143, 143, 143, 1);
 	}
 
 	@media (max-width: 820px) {
-		height: 70%;
+		width: 90vw;
 	}
 
 	@media (max-width: 700px) {
@@ -69,19 +70,20 @@ export const ImageWrapper = styled.div`
 	justify-content: center;
 	height: 70%;
 	margin-bottom: 5%;
+	position: relative;
 
-	@media (max-width: 420px) {
-		height: 100%;
+	@media (max-width: 700px) {
+		height: 90%;
 	}
 `
 export const ImagesWrapper = styled.div`
+	position: relative;
 	width: 100%;
 	height: 25%;
 	display: flex;
-	justify-content: center;
+	justify-content: space-evenly;
 
 	& img {
-		width: 25%;
 		max-height: 100%;
 		cursor: pointer;
 		transition: all 250ms ease-in-out;
@@ -99,9 +101,9 @@ export const ImagesWrapper = styled.div`
 		}
 	}
 `
-export const Image = styled.img`
-	margin: 0.5em;
-	max-height: 100%;
+export const StyledImage = styled(Image)`
+	// margin-right: 1em !important;
+	//margin-bottom: 1em !important;
 `
 export const Title = styled.h1`
 	font-size: 1.6em;
@@ -162,16 +164,16 @@ export const Color = styled.div`
 		background-color: ${DARK};
 	}
 	&.grey {
-		background-color: grey;
+		background-color: ${GREY};
 	}
 	&.brown {
-		background-color: #a78f77;
+		background-color: ${BROWN};
 	}
 	&.teak {
-		background-color: #deb887;
+		background-color: ${TEAK};
 	}
 	&.cream {
-		background-color: cream;
+		background-color: ${CREAM};
 	}
 `
 export const LengthFilter = styled.div`

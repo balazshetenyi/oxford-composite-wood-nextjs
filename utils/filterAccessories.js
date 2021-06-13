@@ -1,42 +1,47 @@
 export function filterAccessories(list, product, products) {
-	if (product && products && product.productType.toLowerCase().includes("decking")) {
+	const accessories = products.filter((collection) =>
+		collection.title.toLowerCase().includes("accessories")
+	)[0].products
+
+	if (product.title.toLowerCase().includes("decking")) {
 		const productsToBuy = [
 			{
-				product: products.filter((products) => products.title.includes("clip"))[0],
+				product: accessories.filter((product) => product.title.includes("clip"))[0],
 				quantity: list.clip,
 			},
 			{
-				product: products.filter((products) => products.title.includes("fasteners"))[0], // only the first one shows
+				product: accessories.filter((product) => product.title.includes("fasteners"))[0], // only the first one shows
 				quantity: list.fasteners,
 			},
 			{
-				product: products.filter((products) => products.title.includes("joist"))[0],
+				product: accessories.filter((product) => product.title.includes("joist"))[0],
 				quantity: list.joist,
 			},
-			{
-				product: products
-					.filter((products) => products.title.includes("trim"))
-					.filter(
-						(trim) =>
-							trim.options[0].values[0].value === product.options[0].values[0].value
-					)[0],
-				quantity: list.trim,
-			},
+			// {
+			// 	product: accessories
+			// 		.filter((product) => product.title.includes("trim") && product.availableForSale)
+			// 		.filter(
+			// 			(trim) =>
+			// 				trim.variants[0].title.toLowerCase() ===
+			// 				product.variants[0].title.toLowerCase()
+			// 		)[0],
+			// 	quantity: list.trim,
+			// },
 		]
 		return productsToBuy
-	} else if (product && products && product.productType.toLowerCase().includes("cladding")) {
+	} else if (product.title.toLowerCase().includes("cladding")) {
 		const productsToBuy = [
 			{
-				product: products.filter((products) => products.title.includes("clip"))[0],
+				product: accessories.filter((product) => product.title.includes("clip"))[0],
 				quantity: list.clip,
 			},
 			{
-				product: products.filter((products) => products.title.includes("joist"))[0],
+				product: accessories.filter((product) => product.title.includes("joist"))[0],
 				quantity: list.joist,
 			},
 			{
-				product: products
-					.filter((products) => products.title.includes("trim"))
+				product: accessories
+					.filter((product) => product.title.includes("trim"))
 					.filter(
 						(trim) =>
 							trim.options[0].values[0].value === product.options[0].values[0].value

@@ -5,7 +5,7 @@ import {
 	ImageContainer,
 	ImageWrapper,
 	ImagesWrapper,
-	Image,
+	StyledImage,
 	Title,
 	Text,
 	Price,
@@ -47,8 +47,8 @@ Product.ImageWrapper = function ProductImageWrapper({ children, ...restProps }) 
 	return <ImageWrapper {...restProps}>{children}</ImageWrapper>
 }
 
-Product.Image = function ProductImage({ src, ...restProps }) {
-	return <Image src={src} {...restProps} />
+Product.StyledImage = function ProductStyledImage({ src, ...restProps }) {
+	return <StyledImage src={src} {...restProps} />
 }
 
 Product.Title = function ProductTitle({ children, ...restProps }) {
