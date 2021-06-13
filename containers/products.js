@@ -1,21 +1,14 @@
-import { useState, useContext, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Products } from "../components"
 import Link from "next/link"
-import { ShopContext } from "../context/shopContext"
 import { ProductsLoadingContainer } from "./products-loading"
 import { ErrorContainer } from "../containers/errorPage"
+import { generateRoute } from "../utils/generateRoute.ts"
 
-export function ProductsContainer() {
-	const { collections, fetchProductById, error } = useContext(ShopContext)
+export function ProductsContainer({ collections }) {
 	const [pageTitle, setPageTitle] = useState("All Products")
-	// Show category list
+	// // Show category list
 	const [showCategories, setShowCategories] = useState(false)
-	const [loading, setLoading] = useState(true)
-
-	useEffect(() => {
-		collections && setLoading(false)
-		console.log(collections)
-	}, [collections])
 
 	const handleFilter = (category) => {
 		setPageTitle(category)
@@ -47,38 +40,13 @@ export function ProductsContainer() {
 							(product) =>
 								product.availableForSale && ( // Show available products only
 									// if page title is not All Products, then match the category and return the items
-									<Link href={`/products/${product.id}`} passHref>
-										<a onClick={fetchProductById(product.id)}>
-											<Products.Pane key={product.id} className="productPane">
-												<Products.Textbox>
-													<Products.Wrapper>
-														<Products.Item
-															src={product.images[0].src}
-														></Products.Item>
-													</Products.Wrapper>
-													<Products.Text>{product.title}</Products.Text>
-												</Products.Textbox>
-												<Products.Textbox>
-													<Products.Price>
-														£{product.variants[0].price}
-													</Products.Price>
-													<Products.AddToCart>
-														View Item
-													</Products.AddToCart>
-												</Products.Textbox>
-											</Products.Pane>
-										</a>
-									</Link>
-								)
-						)
-					)
-			: collections.map((collection) =>
-					collection.products.map(
-						(product) =>
-							product.availableForSale && ( // Show available products only
-								// if page title is all products, then do not filter
-								<Link href={`/products/${product.id}`} passHref>
-									<a>
+									<Link
+										href={`/products/${collection.title.toLowerCase()}/${
+											product.id
+										}`}
+										key={product.id}
+										passHref
+									>
 										<Products.Pane key={product.id} className="productPane">
 											<Products.Textbox>
 												<Products.Wrapper>
@@ -95,17 +63,44 @@ export function ProductsContainer() {
 												<Products.AddToCart>View Item</Products.AddToCart>
 											</Products.Textbox>
 										</Products.Pane>
-									</a>
+									</Link>
+								)
+						)
+					)
+			: collections.map((collection) =>
+					collection.products.map(
+						(product) =>
+							product.availableForSale && ( // Show available products only
+								// if page title is all products, then do not filter
+								<Link
+									href={`/products/${collection.title.toLowerCase()}/${
+										product.id
+									}`}
+									key={product.id}
+									passHref
+								>
+									<Products.Pane key={product.id} className="productPane">
+										<Products.Textbox>
+											<Products.Wrapper>
+												<Products.Item
+													src={product.images[0].src}
+												></Products.Item>
+											</Products.Wrapper>
+											<Products.Text>{product.title}</Products.Text>
+										</Products.Textbox>
+										<Products.Textbox>
+											<Products.Price>
+												£{product.variants[0].price}
+											</Products.Price>
+											<Products.AddToCart>View Item</Products.AddToCart>
+										</Products.Textbox>
+									</Products.Pane>
 								</Link>
 							)
 					)
 			  )
 
-	return error ? (
-		<ErrorContainer />
-	) : loading ? (
-		<ProductsLoadingContainer />
-	) : (
+	return (
 		<Products>
 			<Products.Textbox className="categoryTitleContainer">
 				<Products.Title
