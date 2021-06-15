@@ -19,14 +19,14 @@ export const Group = styled.div`
 		justify-content: center;
 		padding-top: 10px;
 
-		@media (max-width: 1200px) {
+		/* @media (max-width: 1200px) {
 			display: block;
 			position: absolute;
 			top: ${({ showCategories }) => (showCategories ? "0" : "-600px")};
 			transition: all 300ms linear;
 			background-color: ${LIGHT};
 			width: 100%;
-		}
+		} */
 	}
 
 	&.productsList {
@@ -52,12 +52,12 @@ export const Wrapper = styled.div`
 		box-shadow: none;
 	}
 
-	@media (max-width: 1200px) {
+	/* @media (max-width: 1200px) {
 		&.categoryWrapper {
 			width: 70%;
 			margin: 0 auto;
 		}
-	}
+	} */
 `
 
 export const Pane = styled.div`
@@ -65,6 +65,7 @@ export const Pane = styled.div`
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
+	height: 100%;
 
 	&.productPane {
 		background-color: #fff;
@@ -94,12 +95,6 @@ export const Category = styled.div`
 
 	&:hover {
 		transform: scale(1.2);
-	}
-
-	@media (max-width: 1200px) {
-		background: unset;
-		height: unset;
-		width: unset;
 	}
 `
 export const Item = styled.div`
@@ -135,13 +130,6 @@ export const ProductTitle = styled.h3`
 	color: ${LIGHT};
 	text-align: center;
 	padding: 0 0.5em;
-
-	@media (max-width: 1200px) {
-		margin: 0;
-		color: ${DARK};
-		display: inline-block;
-		margin: 0.5em auto;
-	}
 `
 export const Textbox = styled.div`
 	width: 100%;
@@ -213,7 +201,7 @@ export const Icon = styled.div`
 		grid-column: 3 / 4;
 		align-self: center;
 		transition: all 250ms;
-		justify-self: ${({ showCategories }) => (showCategories === true ? "end" : "start")};
+		//justify-self: ${({ showCategories }) => (showCategories === true ? "end" : "start")};
 	}
 `
 export const Loading = styled.p``

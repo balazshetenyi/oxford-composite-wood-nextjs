@@ -154,6 +154,7 @@ export const ColorPicker = styled.div`
 	margin-bottom: 1em;
 `
 export const Color = styled.div`
+	display: block;
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;

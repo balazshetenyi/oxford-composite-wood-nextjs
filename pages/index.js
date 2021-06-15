@@ -1,8 +1,8 @@
 import Head from "next/head"
 import { JumbotronContainer } from "../containers/jumbotron"
 import { AdvantagesContainer } from "../containers/advantages"
-import { PreOrdersContainer } from "../containers/pre-orders"
 import { SubscribeContainer } from "../containers/subscribe"
+import { TestimonialsContainer } from "../containers/testimonials"
 
 export default function Home() {
 	return (
@@ -17,8 +17,8 @@ export default function Home() {
 			</Head>
 			<main>
 				<JumbotronContainer />
+				<TestimonialsContainer />
 				<AdvantagesContainer />
-				<PreOrdersContainer />
 				<SubscribeContainer />
 			</main>
 		</>

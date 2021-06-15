@@ -2,12 +2,12 @@ import styled from "styled-components"
 import { LIGHT, DARK } from "../../../constants/colors"
 
 export const Background = styled.section`
-	background: url(${({ src }) => (src ? `/images/bg/${src}.jpg` : "/images/bg/bg-01.jpg")}) center /
+	background: url(${({ src }) => (src ? `/images/bg/${src}.jpg` : "/images/bg/bg-01.png")}) left /
 		cover no-repeat;
 	background-color: ${DARK};
 	background-blend-mode: hard-light;
 	display: flex;
-	align-items: flex-end;
+	align-items: center;
 	height: calc(100vh - 6em);
 `
 

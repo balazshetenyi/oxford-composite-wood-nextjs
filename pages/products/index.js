@@ -1,12 +1,12 @@
-import { SubscribeContainer } from "../../containers/subscribe"
-import { ProductsContainer } from "../../containers/products"
 import { Storefront } from "../../context/shopify"
+import { SubscribeContainer } from "../../containers/subscribe"
+import { CategoryContainer } from "../../containers/categoryContainer"
 
 export default function Products({ collections }) {
 	console.log(collections)
 	return (
 		<>
-			<ProductsContainer collections={collections} />
+			<CategoryContainer collections={collections} />
 			<SubscribeContainer />
 		</>
 	)
