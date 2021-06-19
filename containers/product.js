@@ -2,39 +2,55 @@ import React, { useState, useEffect } from "react"
 import { CART, PRODUCTS } from "../constants/routes"
 import { Product, Products, Calculator } from "../components"
 import Link from "next/link"
-import { useRouter } from "next/router"
 import { GetQuantity } from "../utils/calculator"
 import { DECKING, CLADDING } from "../fixtures/dimensions"
 import { getAccesories } from "../utils/accessories"
-import { LoadingContainer } from "./loading"
 import { filterAccessories } from "../utils/filterAccessories"
 import { getColor } from "../utils/getColor.ts"
 
 export function ProductContainer({ product, collections }) {
-	const router = useRouter()
 	// Products states and shopping cart
 	const [quantity, setQuantity] = useState(1)
 	const [imageIndex, setImageIndex] = useState(0)
 	const collectionOfProduct = collections.filter((collection) =>
 		product.productType.toLowerCase().includes(collection.title.toLowerCase())
 	)[0]
-	console.log(product)
-	console.log(collections)
-	console.log(collectionOfProduct)
 	// Filter products state
 	const [color, setColor] = useState("")
 	const [length, setLength] = useState("")
+	const [lengthFilter, setLengthFilter] = useState([])
+	//console.log(product)
 	// Calculator state
 	const [squareMeter, setSquareMeter] = useState(0)
 	const [showResult, setShowResult] = useState(false)
 	// Accesoories
 	const [accessoriesToOffer, setAccessoriesToOffer] = useState(null)
+	// Selected product
+	let selectedProduct = {
+		color,
+		length,
+	}
 
 	// Set colour and length on product load
 	useEffect(() => {
-		setColor(product?.options[0]?.values[0].value)
-		setLength(product?.options[1]?.values[0].value)
+		setColor(product?.options[0]?.values[0].value || null)
+		setLength(product?.options[1]?.values[0].value || null)
+		getPossibleLengths(collectionOfProduct)
 	}, [product])
+
+	// Filter available products
+	function getPossibleLengths(collection) {
+		collection?.products.map((prod) => {
+			if (prod?.options[1]) {
+				if (
+					!lengthFilter.includes(prod?.options[1]?.values[0].value) &&
+					prod.availableForSale
+				) {
+					lengthFilter.push(prod?.options[1]?.values[0].value)
+				}
+			} else return
+		})
+	}
 
 	// Get the required accessories
 	useEffect(() => {
@@ -120,23 +136,37 @@ export function ProductContainer({ product, collections }) {
 				<Product.Filter>
 					{/* Filter by color */}
 					<Product.ColorPicker>
-						<Product.Text>{color && "Choose a colour"}</Product.Text>
-						{collectionOfProduct.products.map((product) => (
-							<Link
-								href={`/products/${collectionOfProduct.title.toLowerCase()}/${
-									product?.id
-								}`}
-								key={product?.id}
-								onClick={() => setColor(getColor(product))}
-							>
-								<a>
-									<Product.Color
-										className={product?.options[0].values[0].value.toLowerCase()}
-									></Product.Color>
-								</a>
-							</Link>
-						))}
+						<Product.Text>
+							{color && collectionOfProduct && "Choose a colour"}
+						</Product.Text>
+						{collectionOfProduct &&
+							collectionOfProduct.products
+								.filter((prod) => prod.availableForSale)
+								.map((product) => (
+									<Link
+										href={`/products/${collectionOfProduct.title.toLowerCase()}/${
+											product?.id
+										}`}
+										key={product?.id}
+										onClick={() => setColor(getColor(product))}
+									>
+										<a>
+											<Product.Color
+												className={product?.options[0].values[0].value.toLowerCase()}
+											></Product.Color>
+										</a>
+									</Link>
+								))}
 					</Product.ColorPicker>
+					<Product.LengthFilter>
+						<Product.Text>{lengthFilter.length > 1 && "Select length"}</Product.Text>
+						{lengthFilter?.map((length) => (
+							<Product.Length
+								className={Number(length)}
+								key={length}
+							>{`${length} cm`}</Product.Length>
+						))}
+					</Product.LengthFilter>
 					<Product.Quantity>
 						<Product.Text className="quantityTitle">Quantity</Product.Text>
 						<Product.Select
@@ -187,63 +217,6 @@ export function ProductContainer({ product, collections }) {
 			</Product.Group>
 			{/* ------------ */}
 			{/** Accessories */}
-			<Product.Group className="accessories">
-				<Product.Subtitle>
-					{accessoriesToOffer &&
-						"We recommend adding the following accessories to complete your project"}
-				</Product.Subtitle>
-				<Product.Row>
-					{accessoriesToOffer != undefined &&
-						collections &&
-						accessoriesToOffer.map((prod) => (
-							<Products.Pane
-								key={prod.product?.id}
-								style={{ margin: ".5em" }}
-								className="productPane"
-							>
-								<Link href={`/products/${prod.product?.id}`}>
-									<a>
-										<Products.Textbox>
-											<Products.Wrapper>
-												<Products.Item
-													src={prod.product?.images[0].src}
-												></Products.Item>
-											</Products.Wrapper>
-											<Products.Text>{prod.product?.title}</Products.Text>
-										</Products.Textbox>
-									</a>
-								</Link>
-								<Products.Textbox>
-									<Products.ItemQuantity
-										type="number"
-										min="0"
-										value={prod.quantity}
-										onChange={({ target }) =>
-											handleQuantityChange(
-												parseInt(target.value),
-												prod.product
-											)
-										}
-									/>
-									<Products.Price>
-										£
-										{(prod.product?.variants[0].price * prod.quantity).toFixed(
-											2
-										)}
-									</Products.Price>
-									<Products.AddToCart
-										onClick={() => addItemToCart(prod.product, prod.quantity)}
-									>
-										Add To Cart
-									</Products.AddToCart>
-								</Products.Textbox>
-							</Products.Pane>
-						))}
-				</Product.Row>
-			</Product.Group>
-			<Product.BackToProducts onClick={() => router.back()}>
-				Back To Products
-			</Product.BackToProducts>
 		</Product>
 	)
 }

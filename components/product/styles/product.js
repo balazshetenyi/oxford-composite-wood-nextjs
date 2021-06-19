@@ -182,7 +182,7 @@ export const LengthFilter = styled.div`
 `
 export const Length = styled.div`
 	height: 2em;
-	width: ${({ length }) => (length === "short" ? "10em" : "15em")};
+	width: ${({ length }) => (length === "2400" ? "10em" : "15em")};
 	background-color: ${DARK};
 	margin-bottom: 0.5em;
 	color: ${LIGHT};
