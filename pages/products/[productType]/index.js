@@ -1,5 +1,4 @@
 import { useRouter } from "next/router"
-// import { Products } from "../../../components"
 import { Storefront } from "../../../context/shopify"
 import { ProductsContainer } from "../../../containers/products"
 

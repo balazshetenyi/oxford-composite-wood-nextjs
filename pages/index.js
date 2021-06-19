@@ -1,3 +1,4 @@
+import { Storefront } from "../context/shopify"
 import Head from "next/head"
 import { JumbotronContainer } from "../containers/jumbotron"
 import { AdvantagesContainer } from "../containers/advantages"
@@ -23,4 +24,10 @@ export default function Home() {
 			</main>
 		</>
 	)
+}
+
+export async function getServerSideProps() {
+	const res = await Storefront.collection.fetchAll()
+
+	return { props: { collections: JSON.parse(JSON.stringify(res)) } }
 }

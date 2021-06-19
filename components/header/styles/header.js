@@ -1,6 +1,5 @@
 import styled from "styled-components"
-import { LIGHT, DARK } from "../../../constants/colors"
-import Link from "next/link"
+import { LIGHT, DARK, SHADOW, TEAK } from "../../../constants/colors"
 
 export const Container = styled.header`
 	background-color: ${DARK};
@@ -78,6 +77,7 @@ export const Group = styled.div`
 export const Nav = styled.nav`
 	display: flex;
 	align-items: center;
+	position: relative;
 
 	@media (min-width: 901px) {
 		margin-left: calc(50vw - 230.6px);
@@ -113,7 +113,8 @@ export const HeaderLink = styled.a`
 	transition: text-decoration 200ms;
 
 	&:hover {
-		text-decoration: underline;
+		//text-decoration: underline;
+		color: ${TEAK};
 	}
 
 	@media (max-width: 900px) {
@@ -125,6 +126,24 @@ export const HeaderLink = styled.a`
 		&:last-of-type {
 			margin-bottom: 2em;
 		}
+	}
+`
+
+export const ProductRoutes = styled.div`
+	position: absolute;
+	width: 100vw;
+	padding: 1.5em 2em;
+	background-color: ${LIGHT};
+	color: ${DARK};
+	left: 0;
+	bottom: -60px;
+	display: none;
+	justify-content: center;
+	z-index: 1;
+	border-bottom: 1px solid ${SHADOW};
+
+	& > a {
+		text-transform: capitalize;
 	}
 `
 

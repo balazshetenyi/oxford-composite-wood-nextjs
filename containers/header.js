@@ -1,9 +1,9 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useState } from "react"
 import * as ROUTES from "../constants/routes"
 import { Header } from "../components"
-import { ShopContext } from "../context/shopContext"
 
-export function HeaderContainer() {
+export function HeaderContainer({ productPages }) {
+	const pages = productPages
 	// const { cart } = useContext(ShopContext)
 	const cart = {}
 	const isCartEmpty = true
@@ -89,11 +89,27 @@ export function HeaderContainer() {
 					</Header.HeaderLink>
 					<Header.Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 					<Header.SearchResults>{searchTerm && searchResults}</Header.SearchResults>
+					<Header.ProductRoutes>
+						{pages.map((page) => (
+							<Header.HeaderLink
+								href={`/products/${page}`}
+								key={page}
+								onClick={() => setIsDroppedDown(false)}
+							></Header.HeaderLink>
+						))}
+					</Header.ProductRoutes>
 				</Header.Nav>
 			</Header.Dropdown>
 
 			{/* On large screens */}
-			<Header.Wrapper dontShowOnSmallScreen>
+			<Header.Wrapper dontShowOnSmallScreen className="dropdown-trigger">
+				<Header.ProductRoutes className="dropdown-menu">
+					{pages.map((page) => (
+						<Header.HeaderLink href={`/products/${page}`} key={page}>
+							{page.split("-").join(" ").trim()}
+						</Header.HeaderLink>
+					))}
+				</Header.ProductRoutes>
 				<Header.Nav>
 					<Header.HeaderLink href={ROUTES.HOME}>Home</Header.HeaderLink>
 					<Header.HeaderLink href={ROUTES.PRODUCTS}>Products</Header.HeaderLink>

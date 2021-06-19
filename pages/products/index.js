@@ -3,7 +3,6 @@ import { SubscribeContainer } from "../../containers/subscribe"
 import { CategoryContainer } from "../../containers/categoryContainer"
 
 export default function Products({ collections }) {
-	console.log(collections)
 	return (
 		<>
 			<CategoryContainer collections={collections} />

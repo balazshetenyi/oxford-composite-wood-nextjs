@@ -13,7 +13,7 @@ export default function Product({ product, collections }) {
 
 export async function getServerSideProps({ params }) {
 	const { id } = params
-	const res = await Storefront.product.fetch(id)
+	const res = await Storefront.product.fetchByHandle(id)
 	const coll = await Storefront.collection.fetchAllWithProducts()
 
 	return {

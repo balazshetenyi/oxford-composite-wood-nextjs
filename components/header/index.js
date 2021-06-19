@@ -8,6 +8,7 @@ import {
 	Group,
 	Nav,
 	HeaderLink,
+	ProductRoutes,
 	Search,
 	SearchIcon,
 	SearchInput,
@@ -51,6 +52,10 @@ Header.HeaderLink = function HeaderHeaderLink({ href, children, ...restProps }) 
 			<HeaderLink>{children}</HeaderLink>
 		</Link>
 	)
+}
+
+Header.ProductRoutes = function HeaderProductRoutes({ children, ...restProps }) {
+	return <ProductRoutes {...restProps}>{children}</ProductRoutes>
 }
 
 Header.Search = function HeaderSearch({ searchTerm, setSearchTerm, ...restProps }) {
