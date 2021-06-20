@@ -7,7 +7,7 @@ export default function ProductsPage({ collections }) {
 	const productType = query.productType
 
 	const collection = collections.filter((collection) =>
-		collection.title.toLowerCase().split(" ").join("").includes(productType)
+		collection.title.toLowerCase().split(" ").join("-").includes(productType)
 	)[0]
 
 	return <ProductsContainer collections={collections} collection={collection} />

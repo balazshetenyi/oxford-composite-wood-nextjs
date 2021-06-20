@@ -10,7 +10,7 @@ export function CategoryContainer({ collections }) {
 					<Link
 						href={{
 							pathname: `/products/[slug]`,
-							query: { slug: category.title.toLowerCase().split(" ").join("") },
+							query: { slug: category.title.toLowerCase().split(" ").join("-") },
 						}}
 						passHref
 					>

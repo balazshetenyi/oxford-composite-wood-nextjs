@@ -155,8 +155,8 @@ export const ColorPicker = styled.div`
 `
 export const Color = styled.div`
 	display: block;
-	width: 24px;
-	height: 24px;
+	width: 32px;
+	height: 32px;
 	border-radius: 50%;
 	margin-right: 0.5em;
 	cursor: pointer;

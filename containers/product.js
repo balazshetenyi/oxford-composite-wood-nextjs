@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import { CART, PRODUCTS } from "../constants/routes"
 import { Product, Products, Calculator } from "../components"
 import Link from "next/link"
@@ -9,27 +10,30 @@ import { filterAccessories } from "../utils/filterAccessories"
 import { getColor } from "../utils/getColor.ts"
 
 export function ProductContainer({ product, collections }) {
+	const router = useRouter()
 	// Products states and shopping cart
 	const [quantity, setQuantity] = useState(1)
 	const [imageIndex, setImageIndex] = useState(0)
 	const collectionOfProduct = collections.filter((collection) =>
-		product.productType.toLowerCase().includes(collection.title.toLowerCase())
+		product?.productType.toLowerCase().includes(collection.title.toLowerCase())
 	)[0]
+	const collectionOfAccessories = collections.find((collection) =>
+		collection?.title.toLowerCase().includes("accessories")
+	)
 	// Filter products state
 	const [color, setColor] = useState("")
 	const [length, setLength] = useState("")
 	const [lengthFilter, setLengthFilter] = useState([])
-	//console.log(product)
 	// Calculator state
 	const [squareMeter, setSquareMeter] = useState(0)
 	const [showResult, setShowResult] = useState(false)
 	// Accesoories
 	const [accessoriesToOffer, setAccessoriesToOffer] = useState(null)
 	// Selected product
-	let selectedProduct = {
-		color,
-		length,
-	}
+	const [selectedProduct, setSelectedProduct] = useState({
+		id: product?.variants[0].id,
+		quantity,
+	})
 
 	// Set colour and length on product load
 	useEffect(() => {
@@ -37,6 +41,20 @@ export function ProductContainer({ product, collections }) {
 		setLength(product?.options[1]?.values[0].value || null)
 		getPossibleLengths(collectionOfProduct)
 	}, [product])
+
+	// Set required product to add to the cart
+	// useEffect(async () => {
+	// 	const itemId = await product.variants.find(
+	// 		(variant) =>
+	// 			variant.selectedOptions[0].value == color &&
+	// 			variant.selectedOptions[1].value == length
+	// 	)
+	// 	console.log(itemId)
+	// 	// setSelectedProduct({
+	// 	// 	id: itemId,
+	// 	// 	quantity,
+	// 	// })
+	// }, [color, quantity, length, product])
 
 	// Filter available products
 	function getPossibleLengths(collection) {
@@ -54,12 +72,16 @@ export function ProductContainer({ product, collections }) {
 
 	// Get the required accessories
 	useEffect(() => {
-		if (Object.entries(product).length) {
-			let list = getAccesories(product, quantity)
-			const s = filterAccessories(list, product, collections)
-			setAccessoriesToOffer(filterAccessories(list, product, collections))
+		if (
+			product.productType.toLowerCase().includes("decking") ||
+			product.productType.toLowerCase().includes("cladding")
+		) {
+			if (Object.entries(product).length) {
+				let list = getAccesories(product, quantity)
+				setAccessoriesToOffer(filterAccessories(list, product, collectionOfAccessories))
+			}
 		}
-	}, [product, quantity, collections])
+	}, [product, quantity, collectionOfAccessories])
 
 	// Get the needed material from calculator
 	const handleSubmit = () => {
@@ -145,7 +167,7 @@ export function ProductContainer({ product, collections }) {
 								.map((product) => (
 									<Link
 										href={`/products/${collectionOfProduct.title.toLowerCase()}/${
-											product?.id
+											product?.handle
 										}`}
 										key={product?.id}
 										onClick={() => setColor(getColor(product))}
@@ -217,6 +239,80 @@ export function ProductContainer({ product, collections }) {
 			</Product.Group>
 			{/* ------------ */}
 			{/** Accessories */}
+			<Product.Group className="accessories">
+				<Product.Subtitle>
+					{accessoriesToOffer &&
+						"We recommend adding the following accessories to complete your project"}
+				</Product.Subtitle>
+				<Product.Row>
+					{accessoriesToOffer &&
+						accessoriesToOffer.map(
+							(prod) =>
+								prod.product && (
+									<Link
+										href={`/products/${collectionOfAccessories?.title
+											.toLowerCase()
+											.split(" ")
+											.join("-")}/${prod.handle}`}
+										key={prod.handle}
+										passHref
+									>
+										<a>
+											<Products.Pane
+												key={prod?.product?.id}
+												style={{ margin: ".5em" }}
+												className="productPane"
+											>
+												<Products.Textbox>
+													<Products.Wrapper>
+														<Products.Item
+															src={prod?.product?.images[0].src}
+														></Products.Item>
+													</Products.Wrapper>
+													<Products.Text>
+														{prod?.product?.title}
+													</Products.Text>
+												</Products.Textbox>
+												<Products.Textbox>
+													<Products.ItemQuantity
+														type="number"
+														min="0"
+														value={prod.quantity}
+														onChange={({ target }) =>
+															handleQuantityChange(
+																parseInt(target.value),
+																prod.product
+															)
+														}
+													/>
+													<Products.Price>
+														£
+														{(
+															prod?.product?.variants[0].price *
+															prod?.quantity
+														).toFixed(2)}
+													</Products.Price>
+													<Products.AddToCart
+														onClick={() =>
+															addItemToCart(
+																prod?.product,
+																prod?.quantity
+															)
+														}
+													>
+														Add To Cart
+													</Products.AddToCart>
+												</Products.Textbox>
+											</Products.Pane>
+										</a>
+									</Link>
+								)
+						)}
+				</Product.Row>
+			</Product.Group>
+			<Product.BackToProducts onClick={() => router.back()}>
+				Back To Products
+			</Product.BackToProducts>
 		</Product>
 	)
 }

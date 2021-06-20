@@ -9,6 +9,7 @@ export const Container = styled.section`
 	letter-spacing: 0.5px;
 	line-height: 1.3;
 	position: relative;
+	text-align: center;
 `
 export const Group = styled.div`
 	padding: 0 1em 3em;
