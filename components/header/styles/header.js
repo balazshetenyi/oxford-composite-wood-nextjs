@@ -108,12 +108,12 @@ export const Logo = styled.img`
 export const HeaderLink = styled.a`
 	font-size: 1.3em;
 	text-decoration: none;
+	text-transform: capitalize;
 	color: ${DARK};
-	margin: 0 1em;
-	transition: text-decoration 200ms;
+	margin: 0 0.5em;
+	white-space: nowrap;
 
 	&:hover {
-		//text-decoration: underline;
 		color: ${TEAK};
 	}
 
@@ -234,13 +234,12 @@ export const Icon = styled.img`
 `
 
 export const Dropdown = styled.div`
-	background: url(${({ src }) => src}) center / cover no-repeat;
 	background-color: ${LIGHT};
 	padding: 1em 0;
 	position: relative;
-	overflow: ${({ isDroppedDown }) => (isDroppedDown === true ? "visible" : "hidden")};
+	overflow: ${({ isDroppedDown }) => (isDroppedDown === true ? "scroll" : "hidden")};
 	transition: all 0.5s;
-	height: ${({ isDroppedDown }) => (isDroppedDown === true ? "440px" : "50px")};
+	height: ${({ isDroppedDown }) => (isDroppedDown === true ? "100vh" : "50px")};
 
 	@media (min-width: 901px) {
 		display: ${({ dontShowOnLargeScreen }) => dontShowOnLargeScreen && "none"};

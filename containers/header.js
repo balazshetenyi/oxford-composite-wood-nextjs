@@ -27,6 +27,10 @@ export function HeaderContainer({ productPages }) {
 	//     setSearchResults(links)
 	// }, [searchTerm, products])
 
+	const handleDropdownClose = () => {
+		setIsDroppedDown(false)
+	}
+
 	return (
 		<Header>
 			<Header.Pane>
@@ -62,42 +66,25 @@ export function HeaderContainer({ productPages }) {
 				<Header.Icon
 					href={"#"}
 					src={"/images/icons/cart.svg"}
-					onClick={() => setIsDroppedDown(false)}
+					onClick={handleDropdownClose}
 					alt="cart icon"
 					width="20px"
 					height="20px"
 				/>
 				<Header.Span isCartEmpty={isCartEmpty}>{cart.length}</Header.Span>
-				<Header.Nav>
-					<Header.HeaderLink href={ROUTES.HOME} onClick={() => setIsDroppedDown(false)}>
+				<Header.Nav onClick={handleDropdownClose}>
+					<Header.HeaderLink href={ROUTES.HOME} onClick={handleDropdownClose}>
 						Home
 					</Header.HeaderLink>
-					<Header.HeaderLink
-						href={ROUTES.PRODUCTS}
-						onClick={() => setIsDroppedDown(false)}
-					>
-						Products
-					</Header.HeaderLink>
-					<Header.HeaderLink href={ROUTES.ABOUT} onClick={() => setIsDroppedDown(false)}>
-						About
-					</Header.HeaderLink>
-					<Header.HeaderLink
-						href={ROUTES.CONTACT}
-						onClick={() => setIsDroppedDown(false)}
-					>
-						Contact us
-					</Header.HeaderLink>
+					{pages.map((page) => (
+						<Header.HeaderLink href={`/products/${page}`} key={page}>
+							{page.split("-").join(" ").trim()}
+						</Header.HeaderLink>
+					))}
+					<Header.HeaderLink href={ROUTES.ABOUT}>About</Header.HeaderLink>
+					<Header.HeaderLink href={ROUTES.CONTACT}>Contact us</Header.HeaderLink>
 					<Header.Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 					<Header.SearchResults>{searchTerm && searchResults}</Header.SearchResults>
-					<Header.ProductRoutes>
-						{pages.map((page) => (
-							<Header.HeaderLink
-								href={`/products/${page}`}
-								key={page}
-								onClick={() => setIsDroppedDown(false)}
-							></Header.HeaderLink>
-						))}
-					</Header.ProductRoutes>
 				</Header.Nav>
 			</Header.Dropdown>
 
@@ -124,7 +111,6 @@ export function HeaderContainer({ productPages }) {
 						href={ROUTES.CART}
 						src={"/images/icons/cart.svg"}
 						alt="cart icon"
-						onClick={() => setIsDroppedDown(false)}
 						width="20px"
 						height="20px"
 					/>
