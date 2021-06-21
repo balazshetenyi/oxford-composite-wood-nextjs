@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
-import { CART, PRODUCTS } from "../constants/routes"
-import { Product, Products, Calculator } from "../components"
 import Link from "next/link"
+import { Storefront } from "../context/shopify"
+import { CART } from "../constants/routes"
+import { Product, Products, Calculator } from "../components"
 import { GetQuantity } from "../utils/calculator"
 import { DECKING, CLADDING } from "../fixtures/dimensions"
 import { getAccesories } from "../utils/accessories"
@@ -29,11 +30,6 @@ export function ProductContainer({ product, collections }) {
 	const [showResult, setShowResult] = useState(false)
 	// Accesoories
 	const [accessoriesToOffer, setAccessoriesToOffer] = useState(null)
-	// Selected product
-	const [selectedProduct, setSelectedProduct] = useState({
-		id: product?.variants[0].id,
-		quantity,
-	})
 
 	// Set colour and length on product load
 	useEffect(() => {
@@ -41,20 +37,6 @@ export function ProductContainer({ product, collections }) {
 		setLength(product?.options[1]?.values[0].value || null)
 		getPossibleLengths(collectionOfProduct)
 	}, [product])
-
-	// Set required product to add to the cart
-	// useEffect(async () => {
-	// 	const itemId = await product.variants.find(
-	// 		(variant) =>
-	// 			variant.selectedOptions[0].value == color &&
-	// 			variant.selectedOptions[1].value == length
-	// 	)
-	// 	console.log(itemId)
-	// 	// setSelectedProduct({
-	// 	// 	id: itemId,
-	// 	// 	quantity,
-	// 	// })
-	// }, [color, quantity, length, product])
 
 	// Filter available products
 	function getPossibleLengths(collection) {
@@ -84,7 +66,7 @@ export function ProductContainer({ product, collections }) {
 	}, [product, quantity, collectionOfAccessories])
 
 	// Get the needed material from calculator
-	const handleSubmit = () => {
+	function handleSubmit() {
 		// Get the measurements
 		const material = product.productType.toLowerCase().includes("decking")
 			? DECKING.oneSquare
@@ -96,14 +78,36 @@ export function ProductContainer({ product, collections }) {
 		setShowResult(true)
 	}
 
-	const handleQuantityChange = (value, product) => {
+	function handleQuantityChange(value, product) {
 		const newAccessories = accessoriesToOffer.reduce((acc, item) => {
-			if (item.product.id === product.id) {
+			if (item?.product?.id === product?.id) {
 				return [...acc, { ...item, quantity: value }]
 			}
 			return [...acc, item]
 		}, [])
 		setAccessoriesToOffer(newAccessories)
+	}
+
+	async function addItemToCart(item, quantity) {
+		const storage = window.localStorage
+		let checkoutId = window.localStorage.getItem("checkoutId")
+
+		if (!checkoutId) {
+			const checkout = await Storefront.checkout.create()
+			checkoutId = checkout.id
+			storage.setItem("checkoutId", checkoutId)
+		}
+
+		const cart = await Storefront.checkout.addLineItems(checkoutId, [
+			{
+				variantId: item.variants[0].id,
+				quantity,
+			},
+		])
+
+		storage.setItem("cart", JSON.stringify(cart))
+
+		console.log(cart)
 	}
 
 	return (
@@ -249,20 +253,20 @@ export function ProductContainer({ product, collections }) {
 						accessoriesToOffer.map(
 							(prod) =>
 								prod.product && (
-									<Link
-										href={`/products/${collectionOfAccessories?.title
-											.toLowerCase()
-											.split(" ")
-											.join("-")}/${prod.handle}`}
-										key={prod.handle}
-										passHref
+									<Products.Pane
+										key={prod?.product?.id}
+										style={{ margin: ".5em" }}
+										className="productPane"
 									>
-										<a>
-											<Products.Pane
-												key={prod?.product?.id}
-												style={{ margin: ".5em" }}
-												className="productPane"
-											>
+										<Link
+											href={`/products/${collectionOfAccessories?.title
+												.toLowerCase()
+												.split(" ")
+												.join("-")}/${prod.product.handle}`}
+											key={prod.product.handle}
+											passHref
+										>
+											<a>
 												<Products.Textbox>
 													<Products.Wrapper>
 														<Products.Item
@@ -273,39 +277,39 @@ export function ProductContainer({ product, collections }) {
 														{prod?.product?.title}
 													</Products.Text>
 												</Products.Textbox>
-												<Products.Textbox>
-													<Products.ItemQuantity
-														type="number"
-														min="0"
-														value={prod.quantity}
-														onChange={({ target }) =>
-															handleQuantityChange(
-																parseInt(target.value),
-																prod.product
-															)
-														}
-													/>
-													<Products.Price>
-														£
-														{(
-															prod?.product?.variants[0].price *
-															prod?.quantity
-														).toFixed(2)}
-													</Products.Price>
-													<Products.AddToCart
-														onClick={() =>
-															addItemToCart(
-																prod?.product,
-																prod?.quantity
-															)
-														}
-													>
-														Add To Cart
-													</Products.AddToCart>
-												</Products.Textbox>
-											</Products.Pane>
-										</a>
-									</Link>
+											</a>
+										</Link>
+										<Products.Textbox>
+											<Products.ItemQuantity
+												type="number"
+												min="0"
+												value={prod.quantity}
+												onChange={({ target }) =>
+													handleQuantityChange(
+														parseInt(target.value),
+														prod.product
+													)
+												}
+											/>
+											<Products.Price>
+												£
+												{(
+													prod?.product?.variants[0].price *
+													prod?.quantity
+												).toFixed(2)}
+											</Products.Price>
+											<Products.AddToCart
+												onClick={() =>
+													addItemToCart(
+														prod?.product,
+														parseInt(prod?.quantity)
+													)
+												}
+											>
+												Add To Cart
+											</Products.AddToCart>
+										</Products.Textbox>
+									</Products.Pane>
 								)
 						)}
 				</Product.Row>
