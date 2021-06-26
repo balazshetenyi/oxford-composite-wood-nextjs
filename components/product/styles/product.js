@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import Image from "next/image"
-import { LIGHT, DARK, GREY, TEAK, CREAM, BROWN } from "../../../constants/colors"
+import { LIGHT, DARK, GREY, TEAK, CREAM, BROWN, ACTIVE } from "../../../constants/colors"
 
 export const Container = styled.section`
 	max-width: 1200px;
@@ -176,6 +176,10 @@ export const Color = styled.div`
 	&.cream {
 		background-color: ${CREAM};
 	}
+
+	&.active {
+		border: 2px solid ${ACTIVE};
+	}
 `
 export const LengthFilter = styled.div`
 	grid-area: len;
@@ -192,8 +196,8 @@ export const Length = styled.div`
 	cursor: pointer;
 
 	&.active {
-		border: 3px solid #ffc300;
-		color: #ffc300;
+		border: 2px solid ${ACTIVE};
+		color: ${ACTIVE};
 	}
 `
 
