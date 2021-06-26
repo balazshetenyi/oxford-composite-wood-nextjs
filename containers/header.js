@@ -1,12 +1,13 @@
-import React, { useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import * as ROUTES from "../constants/routes"
 import { Header } from "../components"
+import { ShopContext } from "../context/shopContext"
 
 export function HeaderContainer({ productPages }) {
 	const pages = productPages
 	// const { cart } = useContext(ShopContext)
-	const cart = {}
-	const isCartEmpty = true
+	const { isCartEmpty, totalQuantity } = useContext(ShopContext)
+
 	const [isDroppedDown, setIsDroppedDown] = useState(false)
 	const [searchTerm, setSearchTerm] = useState("")
 	const [searchResults, setSearchResults] = useState(null)
@@ -36,11 +37,7 @@ export function HeaderContainer({ productPages }) {
 			<Header.Pane>
 				<Header.Contact>Oxford Composite Wood</Header.Contact>
 				<Header.Contact>Tel: (+44)7543499917</Header.Contact>
-				<Header.Contact
-					as="a"
-					className="email"
-					href="mailto: oxfordcompositewood@gmail.com"
-				>
+				<Header.Contact as="a" className="email" href="mailto: oxfordcompositewood@gmail.com">
 					oxfordcompositewood@gmail.com
 				</Header.Contact>
 				<Header.Logo
@@ -71,7 +68,7 @@ export function HeaderContainer({ productPages }) {
 					width="20px"
 					height="20px"
 				/>
-				<Header.Span isCartEmpty={isCartEmpty}>{cart.length}</Header.Span>
+				<Header.Span isCartEmpty={isCartEmpty}>{""}</Header.Span>
 				<Header.Nav onClick={handleDropdownClose}>
 					<Header.HeaderLink href={ROUTES.HOME} onClick={handleDropdownClose}>
 						Home
@@ -114,7 +111,7 @@ export function HeaderContainer({ productPages }) {
 						width="20px"
 						height="20px"
 					/>
-					<Header.Span isCartEmpty={isCartEmpty}>{cart.length}</Header.Span>
+					<Header.Span isCartEmpty={isCartEmpty}>{totalQuantity}</Header.Span>
 				</Header.Group>
 			</Header.Wrapper>
 		</Header>

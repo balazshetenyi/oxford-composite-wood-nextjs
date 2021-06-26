@@ -1,17 +1,29 @@
 import { createContext, useState, useEffect } from "react"
-//import { cartReducer } from "../hooks/cartReducer"
 import { Storefront } from "./shopify"
 
 const ShopContext = createContext()
 
-function ShopContextProvider({ children, products }) {
+function ShopContextProvider({ children }) {
 	const [cart, setCart] = useState(null)
+	const [isCartEmpty, setIsCartEmpty] = useState(true)
+	const [totalQuantity, setTotalQuantity] = useState(0)
 	// const [isCartOpen, setIsCartOpen] = useState(false)
 
 	// Create a checkout ID on render
 	useEffect(async () => {
-		setCart(JSON.parse(window.localStorage.getItem("cart")))
+		const cart = await JSON.parse(window.localStorage.getItem("cart"))
+		setCart(cart)
 	}, [])
+
+	// Follow cart state
+	useEffect(async () => {
+		if (cart?.lineItems.length > 0) {
+			setTotalQuantity(cart?.lineItems?.map((item) => item.quantity).reduce((acc, curr) => acc + curr))
+			setIsCartEmpty(false)
+		} else {
+			setIsCartEmpty(true)
+		}
+	}, [cart])
 
 	// Add items to cart
 	async function addItemToCart(item, quantity) {
@@ -67,6 +79,8 @@ function ShopContextProvider({ children, products }) {
 				addItemToCart,
 				removeItemFromCart,
 				updateItemsInCart,
+				isCartEmpty,
+				totalQuantity,
 			}}
 		>
 			{children}

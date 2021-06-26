@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react"
+import { useContext } from "react"
 import Media from "react-media"
 import { PRODUCTS } from "../constants/routes"
 import { Cart } from "../components"
