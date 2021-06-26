@@ -42,10 +42,7 @@ export function ProductContainer({ product, collections }) {
 	function getPossibleLengths(collection) {
 		collection?.products.map((prod) => {
 			if (prod?.options[1]) {
-				if (
-					!lengthFilter.includes(prod?.options[1]?.values[0].value) &&
-					prod.availableForSale
-				) {
+				if (!lengthFilter.includes(prod?.options[1]?.values[0].value) && prod.availableForSale) {
 					lengthFilter.push(prod?.options[1]?.values[0].value)
 				}
 			} else return
@@ -68,9 +65,7 @@ export function ProductContainer({ product, collections }) {
 	// Get the needed material from calculator
 	function handleSubmit() {
 		// Get the measurements
-		const material = product.productType.toLowerCase().includes("decking")
-			? DECKING.oneSquare
-			: CLADDING.oneSquare
+		const material = product.productType.toLowerCase().includes("decking") ? DECKING.oneSquare : CLADDING.oneSquare
 		// Get the quantity needed
 		const quantity = GetQuantity(squareMeter, material)
 		// Set the quantity
@@ -162,23 +157,22 @@ export function ProductContainer({ product, collections }) {
 				<Product.Filter>
 					{/* Filter by color */}
 					<Product.ColorPicker>
-						<Product.Text>
-							{color && collectionOfProduct && "Choose a colour"}
-						</Product.Text>
+						<Product.Text>{color && collectionOfProduct && "Choose a colour"}</Product.Text>
 						{collectionOfProduct &&
 							collectionOfProduct.products
 								.filter((prod) => prod.availableForSale)
 								.map((product) => (
 									<Link
-										href={`/products/${collectionOfProduct.title.toLowerCase()}/${
-											product?.handle
-										}`}
+										href={`/products/${collectionOfProduct.title.toLowerCase()}/${product?.handle}`}
 										key={product?.id}
 										onClick={() => setColor(getColor(product))}
 									>
 										<a>
 											<Product.Color
-												className={product?.options[0].values[0].value.toLowerCase()}
+												className={`${product?.options[0].values[0].value.toLowerCase()} ${
+													product?.options[0].values[0].value.toLowerCase() === color &&
+													"active"
+												} `}
 											></Product.Color>
 										</a>
 									</Link>
@@ -186,12 +180,24 @@ export function ProductContainer({ product, collections }) {
 					</Product.ColorPicker>
 					<Product.LengthFilter>
 						<Product.Text>{lengthFilter.length > 1 && "Select length"}</Product.Text>
-						{lengthFilter?.map((length) => (
-							<Product.Length
-								className={Number(length)}
-								key={length}
-							>{`${length} cm`}</Product.Length>
-						))}
+						{collectionOfProduct &&
+							collectionOfProduct.products
+								.filter((prod) => prod.availableForSale)
+								.filter((prod) => prod.options[0].values[0].value.toLowerCase() === color)
+								.map((prod) => (
+									<Link
+										href={`/products/${collectionOfProduct.title.toLowerCase()}/${prod?.handle}`}
+										key={prod?.id}
+									>
+										<a>
+											<Product.Length
+												className={`${Number(prod.options[1].values[0].value)} ${
+													prod.options[1].values[0].value == length && "active"
+												}`}
+											>{`${prod.options[1].values[0].value} cm`}</Product.Length>
+										</a>
+									</Link>
+								))}
 					</Product.LengthFilter>
 					<Product.Quantity>
 						<Product.Text className="quantityTitle">Quantity</Product.Text>
@@ -209,16 +215,11 @@ export function ProductContainer({ product, collections }) {
 				<Product.AddToCart onClick={() => addItemToCart(product, parseInt(quantity))}>
 					Add To Cart
 				</Product.AddToCart>
-				<Product.GoToCheckout onClick={() => history.push(CART)}>
-					Go to checkout
-				</Product.GoToCheckout>
+				<Product.GoToCheckout onClick={() => history.push(CART)}>Go to checkout</Product.GoToCheckout>
 				{/* Calculator */}
-				{(product.productType === "composite decking" ||
-					product.productType === "WPC Cladding") && (
+				{(product.productType === "composite decking" || product.productType === "WPC Cladding") && (
 					<Calculator>
-						<Calculator.Title>
-							Not sure how much you need? Use our calculator.
-						</Calculator.Title>
+						<Calculator.Title>Not sure how much you need? Use our calculator.</Calculator.Title>
 						Area:{" "}
 						<Calculator.InputField
 							type="number"
@@ -234,9 +235,9 @@ export function ProductContainer({ product, collections }) {
 						)}
 						<Calculator.Submit onClick={handleSubmit}>Calculate</Calculator.Submit>
 						<Calculator.Description>
-							*We include 5% additional material in the calculation to account for
-							off-cuts and wastage. For diagonally aligned boards we calculate an
-							extra 15% required material due to the higher wastage factor.
+							*We include 5% additional material in the calculation to account for off-cuts and wastage.
+							For diagonally aligned boards we calculate an extra 15% required material due to the higher
+							wastage factor.
 						</Calculator.Description>
 					</Calculator>
 				)}
@@ -245,8 +246,7 @@ export function ProductContainer({ product, collections }) {
 			{/** Accessories */}
 			<Product.Group className="accessories">
 				<Product.Subtitle>
-					{accessoriesToOffer &&
-						"We recommend adding the following accessories to complete your project"}
+					{accessoriesToOffer && "We recommend adding the following accessories to complete your project"}
 				</Product.Subtitle>
 				<Product.Row>
 					{accessoriesToOffer &&
@@ -273,9 +273,7 @@ export function ProductContainer({ product, collections }) {
 															src={prod?.product?.images[0].src}
 														></Products.Item>
 													</Products.Wrapper>
-													<Products.Text>
-														{prod?.product?.title}
-													</Products.Text>
+													<Products.Text>{prod?.product?.title}</Products.Text>
 												</Products.Textbox>
 											</a>
 										</Link>
@@ -285,26 +283,14 @@ export function ProductContainer({ product, collections }) {
 												min="0"
 												value={prod.quantity}
 												onChange={({ target }) =>
-													handleQuantityChange(
-														parseInt(target.value),
-														prod.product
-													)
+													handleQuantityChange(parseInt(target.value), prod.product)
 												}
 											/>
 											<Products.Price>
-												£
-												{(
-													prod?.product?.variants[0].price *
-													prod?.quantity
-												).toFixed(2)}
+												£{(prod?.product?.variants[0].price * prod?.quantity).toFixed(2)}
 											</Products.Price>
 											<Products.AddToCart
-												onClick={() =>
-													addItemToCart(
-														prod?.product,
-														parseInt(prod?.quantity)
-													)
-												}
+												onClick={() => addItemToCart(prod?.product, parseInt(prod?.quantity))}
 											>
 												Add To Cart
 											</Products.AddToCart>
@@ -314,9 +300,7 @@ export function ProductContainer({ product, collections }) {
 						)}
 				</Product.Row>
 			</Product.Group>
-			<Product.BackToProducts onClick={() => router.back()}>
-				Back To Products
-			</Product.BackToProducts>
+			<Product.BackToProducts onClick={() => router.back()}>Back To Products</Product.BackToProducts>
 		</Product>
 	)
 }
