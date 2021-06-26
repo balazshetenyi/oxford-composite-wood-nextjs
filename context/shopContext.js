@@ -1,97 +1,72 @@
-import { createContext, useState, useEffect, useReducer } from "react"
+import { createContext, useState, useEffect } from "react"
 //import { cartReducer } from "../hooks/cartReducer"
 import { Storefront } from "./shopify"
 
 const ShopContext = createContext()
 
 function ShopContextProvider({ children, products }) {
-	// const [checkout, setCheckout] = useState({})
-	// const [collections, setCollections] = useState([])
-	// const [products, setProducts] = useState({})
-	// const [product, setProduct] = useState({})
+	const [cart, setCart] = useState(null)
 	// const [isCartOpen, setIsCartOpen] = useState(false)
-	// const [error, setError] = useState(false)
-	// // Shopping Cart
-	// const [cart, dispatch] = useReducer(cartReducer, [], () => {
-	// 	const local = localStorage.getItem("store")
-	// 	return local ? JSON.parse(local) : []
-	// })
 
-	// useEffect(() => {
-	// 	createCheckout()
-	// 	fetchCollections()
-	// }, [])
+	// Create a checkout ID on render
+	useEffect(async () => {
+		setCart(JSON.parse(window.localStorage.getItem("cart")))
+	}, [])
 
-	// async function fetchCollections() {
-	// 	// Fetch all collections or just a single collection if collection id is provided
-	// 	// collectionId: string - optional
-	// 	const collections = await Storefront.collection.fetchAllWithProducts()
-	// 	setCollections(collections)
-	// 	console.log(collections)
-	// }
+	// Add items to cart
+	async function addItemToCart(item, quantity) {
+		const checkoutId = window.localStorage.getItem("checkoutId")
 
-	// // async function fetchAllProducts() {
-	// // 	// Fetch all products in the shop
-	// // 	const allProducts = await Storefront.product.fetchAll()
-	// // 	setProducts(allProducts)
-	// // }
+		if (!checkoutId) {
+			const { id } = await Storefront.checkout.create()
+			checkoutId - id
+			window.localStorage.setItem("checkoutId", id)
+		}
 
-	// async function fetchProductById(productId) {
-	// 	// Fetch a single product by id
-	// 	// productId: string - required
-	// 	try {
-	// 		const product = await Storefront.product.fetch(productId)
-	// 		setProduct(product)
-	// 	} catch (error) {
-	// 		console.error(error)
-	// 	}
-	// }
+		const cart = await Storefront.checkout.addLineItems(checkoutId, [
+			{
+				variantId: item.variants[0].id,
+				quantity,
+			},
+		])
 
-	// async function createCheckout() {
-	// 	// Create an emoty checkout
-	// 	const checkout = await Storefront.checkout.create()
-	// }
+		window.localStorage.setItem("cart", JSON.stringify(cart))
+		setCart(JSON.parse(window.localStorage.getItem("cart")))
+	}
+	// const lo = JSON.parse(cart)
+	console.log(cart)
 
-	// async function fetchCheckout(checkoutId) {
-	// 	// Fetch checkout by id
-	// 	// chockoutId: string - required
-	// 	const checkout = await Storefront.checkout.fetch(checkoutId)
-	// }
+	// Remove item from cart by ID
+	async function removeItemFromCart(lineItemId) {
+		const checkoutId = await window.localStorage.getItem("checkoutId")
+		window.localStorage.removeItem("cart")
+		const cart = await Storefront.checkout.removeLineItems(checkoutId, [lineItemId])
+		window.localStorage.setItem("cart", JSON.stringify(cart))
+		setCart(JSON.parse(window.localStorage.getItem("cart")))
+	}
 
-	// // async function updateCheckout(checkoutId) {
-
-	// // }
-
-	// async function addItemToCart(checkoutId, itemsToAdd) {
-	// 	// Add new items to checkout
-	// 	// checkoutId: string - required
-	// 	// itemsToAdd: object - required
-	// 	const newCart = await Storefront.checkout.addLineItems(checkoutId, itemsToAdd)
-	// }
-
-	// async function updateItemsInCart(checkoutId, itemsToUpdate) {
-	// 	// Updating the cart
-	// 	// checkoutId: string - required
-	// 	// itemsToUpdate: array of objects - required
-	// 	const updatedCart = await Storefront.checkout.updateLineItems(checkoutId, itemsToUpdate)
-	// }
-
-	// async function removeItemFromCart(checkoutId, itemsToRemove) {
-	// 	// Updating the cart
-	// 	// checkoutId: string - required
-	// 	// itemsToRemove: array of strings - required
-	// 	const updatedCart = await Storefront.checkout.removeLineItems(checkoutId, itemsToRemove)
-	// }
+	// Update item in cart by ID and quantity
+	async function updateItemsInCart(item, quantity) {
+		const checkoutId = await window.localStorage.getItem("checkoutId")
+		window.localStorage.removeItem("cart")
+		const cart = await Storefront.checkout.updateLineItems(checkoutId, [
+			{
+				id: item.id,
+				quantity,
+				variantId: item.variant.id,
+			},
+		])
+		window.localStorage.setItem("cart", JSON.stringify(cart))
+		setCart(JSON.parse(window.localStorage.getItem("cart")))
+	}
 
 	return (
 		<ShopContext.Provider
 			value={{
-				cart: checkout,
-				collections,
-				product,
-				products,
-				fetchProductById,
+				cart,
 				addItemToCart,
+				removeItemFromCart,
+				updateItemsInCart,
 			}}
 		>
 			{children}
@@ -99,10 +74,10 @@ function ShopContextProvider({ children, products }) {
 	)
 }
 
-export async function getServerSideProps() {
-	const res = await Storefront.product.fetchAll()
+// export async function getServerSideProps() {
+// 	const res = await Storefront.product.fetchAll()
 
-	return { props: { products: JSON.parse(JSON.stringify(res)) } }
-}
+// 	return { props: { products: JSON.parse(JSON.stringify(res)) } }
+// }
 
 export { ShopContextProvider, ShopContext }

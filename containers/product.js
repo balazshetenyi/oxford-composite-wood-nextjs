@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import { Storefront } from "../context/shopify"
 import { CART } from "../constants/routes"
 import { Product, Products, Calculator } from "../components"
 import { GetQuantity } from "../utils/calculator"
@@ -9,8 +8,10 @@ import { DECKING, CLADDING } from "../fixtures/dimensions"
 import { getAccesories } from "../utils/accessories"
 import { filterAccessories } from "../utils/filterAccessories"
 import { getColor } from "../utils/getColor.ts"
+import { ShopContext } from "../context/shopContext"
 
 export function ProductContainer({ product, collections }) {
+	const { addItemToCart } = useContext(ShopContext)
 	const router = useRouter()
 	// Products states and shopping cart
 	const [quantity, setQuantity] = useState(1)
@@ -36,6 +37,7 @@ export function ProductContainer({ product, collections }) {
 		setColor(product?.options[0]?.values[0].value || null)
 		setLength(product?.options[1]?.values[0].value || null)
 		getPossibleLengths(collectionOfProduct)
+		setQuantity(1)
 	}, [product])
 
 	// Filter available products
@@ -83,27 +85,28 @@ export function ProductContainer({ product, collections }) {
 		setAccessoriesToOffer(newAccessories)
 	}
 
-	async function addItemToCart(item, quantity) {
-		const storage = window.localStorage
-		let checkoutId = window.localStorage.getItem("checkoutId")
+	// async function addItemToCart(item, quantity) {
+	// 	const storage = window.localStorage
+	// 	let checkoutId = window.localStorage.getItem("checkoutId")
 
-		if (!checkoutId) {
-			const checkout = await Storefront.checkout.create()
-			checkoutId = checkout.id
-			storage.setItem("checkoutId", checkoutId)
-		}
+	// 	if (!checkoutId) {
+	// 		const checkout = await Storefront.checkout.create()
+	// 		console.log("in here")
+	// 		checkoutId = checkout.id
+	// 		storage.setItem("checkoutId", checkoutId)
+	// 	}
 
-		const cart = await Storefront.checkout.addLineItems(checkoutId, [
-			{
-				variantId: item.variants[0].id,
-				quantity,
-			},
-		])
+	// 	// const cart = await Storefront.checkout.addLineItems(checkoutId, [
+	// 	// 	{
+	// 	// 		variantId: item.variants[0].id,
+	// 	// 		quantity,
+	// 	// 	},
+	// 	// ])
 
-		storage.setItem("cart", JSON.stringify(cart))
+	// 	// storage.setItem("cart", JSON.stringify(cart))
 
-		console.log(cart)
-	}
+	// 	// console.log(cart)
+	// }
 
 	return (
 		<Product>
@@ -215,7 +218,7 @@ export function ProductContainer({ product, collections }) {
 				<Product.AddToCart onClick={() => addItemToCart(product, parseInt(quantity))}>
 					Add To Cart
 				</Product.AddToCart>
-				<Product.GoToCheckout onClick={() => history.push(CART)}>Go to checkout</Product.GoToCheckout>
+				<Product.GoToCheckout onClick={() => router.push(CART)}>Go to checkout</Product.GoToCheckout>
 				{/* Calculator */}
 				{(product.productType === "composite decking" || product.productType === "WPC Cladding") && (
 					<Calculator>
