@@ -5,7 +5,7 @@ import "../styles/globals.css"
 
 function MyApp({ Component, pageProps }) {
 	const productPages = pageProps?.collections?.map((page) => page.title.toLowerCase().split(" ").join("-"))
-	console.log(pageProps)
+
 	return (
 		<ShopContextProvider>
 			<HeaderContainer productPages={productPages} />
