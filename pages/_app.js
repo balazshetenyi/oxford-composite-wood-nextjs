@@ -4,7 +4,9 @@ import { ShopContextProvider } from "../context/shopContext"
 import "../styles/globals.css"
 
 function MyApp({ Component, pageProps }) {
-	const productPages = pageProps?.collections?.map((page) => page.title.toLowerCase().split(" ").join("-"))
+	const productPages = pageProps?.collections
+		? pageProps?.collections?.map((page) => page.title.toLowerCase().split(" ").join("-"))
+		: ""
 
 	return (
 		<ShopContextProvider>
