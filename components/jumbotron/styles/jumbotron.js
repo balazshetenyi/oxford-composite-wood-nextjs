@@ -8,14 +8,11 @@ export const Section = styled.section`
 	display: flex;
 	align-items: center;
 	height: calc(100vh - 6em);
-	//flex: 1;
 `
 
 export const Container = styled.div`
 	width: 100%;
 	text-align: center;
-	/* position: relative;
-	height: calc(100vh - 6em); */
 `
 
 export const Title = styled.h1`
