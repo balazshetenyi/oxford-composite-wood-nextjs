@@ -71,14 +71,14 @@ export function HeaderContainer({ productPages }) {
 					height="20px"
 				/>
 				<Header.Icon
-					href={"#"}
+					href={ROUTES.CART}
 					src={"/images/icons/cart.svg"}
 					onClick={handleDropdownClose}
 					alt="cart icon"
 					width="20px"
 					height="20px"
 				/>
-				<Header.Span isCartEmpty={isCartEmpty}>{""}</Header.Span>
+				<Header.Span isCartEmpty={isCartEmpty}>{totalQuantity}</Header.Span>
 				<Header.Nav onClick={handleDropdownClose}>
 					<Header.HeaderLink href={ROUTES.HOME} onClick={handleDropdownClose}>
 						Home

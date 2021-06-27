@@ -55,12 +55,12 @@ export const ImageContainer = styled.div`
 	}
 
 	@media (max-width: 820px) {
-		width: 90vw;
+		height: 80%;
 	}
-
 	@media (max-width: 700px) {
 		display: ${({ showOnSmallScreen }) => showOnSmallScreen && "block"};
 		margin-bottom: 0;
+		height: 30vh;
 	}
 `
 export const ImageWrapper = styled.div`
@@ -73,7 +73,7 @@ export const ImageWrapper = styled.div`
 	position: relative;
 
 	@media (max-width: 700px) {
-		height: 90%;
+		height: 100%;
 	}
 `
 export const ImagesWrapper = styled.div`
@@ -117,6 +117,10 @@ export const Text = styled.p`
 	&.quantityTitle {
 		text-align: right;
 	}
+
+	&.color-picker__title {
+		margin-bottom: 1em;
+	}
 `
 export const Price = styled.h2`
 	margin: 0;
@@ -151,7 +155,7 @@ export const ColorPicker = styled.div`
 	grid-area: colour;
 	height: min-content;
 	align-self: center;
-	margin-bottom: 1em;
+	margin-bottom: 1.25em;
 `
 export const Color = styled.div`
 	display: block;
@@ -198,6 +202,10 @@ export const Length = styled.div`
 	&.active {
 		border: 2px solid ${ACTIVE};
 		color: ${ACTIVE};
+	}
+
+	@media (max-width: 800px) {
+		width: ${({ length }) => (length === "2400" ? "5em" : "10em")};
 	}
 `
 

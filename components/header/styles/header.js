@@ -102,6 +102,14 @@ export const Logo = styled.img`
 	@media (max-width: 900px) {
 		margin: 0;
 	}
+	@media (max-width: 600px) {
+		width: 110px;
+		height: 55px;
+	}
+	@media (max-width: 360px) {
+		width: 80px;
+		height: 40px;
+	}
 `
 
 export const HeaderLink = styled.a`

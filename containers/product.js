@@ -160,7 +160,9 @@ export function ProductContainer({ product, collections }) {
 				<Product.Filter>
 					{/* Filter by color */}
 					<Product.ColorPicker>
-						<Product.Text>{color && collectionOfProduct && "Choose a colour"}</Product.Text>
+						<Product.Text className="color-picker__title">
+							{color && collectionOfProduct && "Choose a colour"}
+						</Product.Text>
 						{collectionOfProduct &&
 							collectionOfProduct.products
 								.filter((prod) => prod.availableForSale)
