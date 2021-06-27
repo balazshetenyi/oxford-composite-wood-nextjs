@@ -1,4 +1,5 @@
-export const LIGHT = "#f7f7f7"
+// export const LIGHT = "#f7f7f7"
+export const LIGHT = "#fff"
 export const DARK = "#4d4d4d"
 export const GREEN = "rgba(143, 167, 119, 20%"
 export const SHADOW = "#ededed"

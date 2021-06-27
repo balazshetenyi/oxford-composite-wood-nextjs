@@ -89,7 +89,6 @@ export const Nav = styled.nav`
 `
 
 export const Logo = styled.img`
-	width: 80px;
 	margin-left: 2em;
 
 	&.logo {
@@ -176,7 +175,7 @@ export const SearchIcon = styled.button`
 export const SearchInput = styled.input`
 	background-color: #fff;
 	color: ${DARK};
-	border: 1px solid white;
+	border: 1px solid ${DARK};
 	transition: all 0.5s;
 	height: 2.2em;
 	font-size: 14px;

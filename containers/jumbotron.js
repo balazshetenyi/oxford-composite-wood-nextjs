@@ -7,7 +7,7 @@ export function JumbotronContainer() {
 		<Jumbotron>
 			<Jumbotron.Container>
 				{/* <Image className="background-image" src="/images/bg/bg-01.png" layout="fill" /> */}
-				<Jumbotron.Button href={ROUTES.PRODUCTS}>Our Products</Jumbotron.Button>
+				{/* <Jumbotron.Button href={ROUTES.PRODUCTS}>Our Products</Jumbotron.Button> */}
 			</Jumbotron.Container>
 		</Jumbotron>
 	)

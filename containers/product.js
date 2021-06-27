@@ -197,7 +197,7 @@ export function ProductContainer({ product, collections }) {
 												className={`${Number(prod.options[1].values[0].value)} ${
 													prod.options[1].values[0].value == length && "active"
 												}`}
-											>{`${prod.options[1].values[0].value} cm`}</Product.Length>
+											>{`${prod.options[1].values[0].value} mm`}</Product.Length>
 										</a>
 									</Link>
 								))}

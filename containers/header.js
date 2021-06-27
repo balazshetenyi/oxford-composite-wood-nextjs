@@ -53,10 +53,10 @@ export function HeaderContainer({ productPages }) {
 				<Header.Logo
 					className="logo"
 					href={ROUTES.HOME}
-					src="/images/logo/logo-main.png"
+					src="/images/logo/logo.png"
 					alt="logo"
-					width="80px"
-					height="80px"
+					width="140px"
+					height="70px"
 				/>
 			</Header.Pane>
 
