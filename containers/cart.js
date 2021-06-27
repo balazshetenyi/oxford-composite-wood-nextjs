@@ -47,10 +47,15 @@ export function CartContainer() {
 										<Cart.Quantity
 											type="number"
 											value={item.quantity}
-											onChange={() => handleQuantityChange(item)}
+											name="quantity"
+											onChange={({ target }) => handleQuantityChange(target.value, item)}
 										/>
-										<Cart.Image src={"/images/icons/trash.svg"} className="trash" onClick={""} />
-										<Cart.Text className="price">Price: £{item.variant.price}/board</Cart.Text>
+										<Cart.Image
+											src={"/images/icons/trash.svg"}
+											className="trash"
+											onClick={() => removeItemFromCart(item.id)}
+										/>
+										<Cart.Text className="price">Price: £{item.variant.price} /board</Cart.Text>
 										<Cart.Text className="item-total">
 											Total: £{(item.variant.price * item.quantity).toFixed(2)}
 										</Cart.Text>
