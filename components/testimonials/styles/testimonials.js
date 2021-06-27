@@ -4,7 +4,7 @@ import { DARK, LIGHT } from "../../../constants/colors"
 export const Container = styled.div`
 	background-color: ${LIGHT};
 	opacity: 0.6;
-	padding: 0 1em;
+	padding: 2em 1em;
 	overflow: scroll;
 `
 export const Wrapper = styled.div`

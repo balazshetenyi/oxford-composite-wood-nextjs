@@ -142,7 +142,7 @@ export const Quantity = styled.div`
 	margin-bottom: 1em;
 
 	@media (max-width: 800px) {
-		margin-right: auto;
+		margin-left: auto;
 	}
 `
 export const ColorPicker = styled.div`

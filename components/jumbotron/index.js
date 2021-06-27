@@ -1,8 +1,12 @@
 import Link from "next/link"
-import { Background, Container, Title, SubTitle, Button } from "./styles/jumbotron"
+import { Section, Background, Container, Title, SubTitle, Button } from "./styles/jumbotron"
 
 export default function Jumbotron({ bg = true, children, ...restProps }) {
-	return bg ? <Background {...restProps}>{children}</Background> : { children }
+	return bg ? <Section {...restProps}>{children}</Section> : { children }
+}
+
+Jumbotron.Background = function JumbotronBackground({ ...restProps }) {
+	return <Background {...restProps} />
 }
 
 Jumbotron.Container = function JumbotronContainer({ children, ...restProps }) {

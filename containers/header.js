@@ -2,31 +2,41 @@ import { useContext, useState, useEffect } from "react"
 import * as ROUTES from "../constants/routes"
 import { Header } from "../components"
 import { ShopContext } from "../context/shopContext"
+import Link from "next/link"
 
 export function HeaderContainer({ productPages }) {
 	const pages = productPages
 	// const { cart } = useContext(ShopContext)
-	const { isCartEmpty, totalQuantity } = useContext(ShopContext)
+	const { isCartEmpty, totalQuantity, allProducts } = useContext(ShopContext)
 
 	const [isDroppedDown, setIsDroppedDown] = useState(false)
 	const [searchTerm, setSearchTerm] = useState("")
 	const [searchResults, setSearchResults] = useState(null)
 
-	// useEffect(() => {
-	//     // Search engine
-	//     const results = products && products.filter(product => product.title.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase()))
-	//     const links = results && results.map(item => {
-	//         return (
-	//             <NextLink to={`/products/${item.id}`} key={item.id} onClick={() => setSearchTerm('')}>
-	//                 <Header.SearchResultsWrapper>
-	//                     <Header.SearchResultsImage src={item.images[0].src} />
-	//                     <Header.SearchResultsTitle>{item.title}</Header.SearchResultsTitle>
-	//                 </Header.SearchResultsWrapper>
-	//             </NextLink>
-	//         )
-	//     })
-	//     setSearchResults(links)
-	// }, [searchTerm, products])
+	useEffect(async () => {
+		// Search engine
+		const results = await allProducts?.filter(
+			(product) =>
+				product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				product.description.toLowerCase().includes(searchTerm.toLowerCase())
+		)
+		const links = await results?.map((item) => {
+			return (
+				<Link
+					href={`/products/${item.productType.toLowerCase().split(" ").join("-")}/${item.handle}`}
+					key={item.id}
+				>
+					<a onClick={() => setSearchTerm("")}>
+						<Header.SearchResultsWrapper>
+							<Header.SearchResultsImage src={item.images[0].src} />
+							<Header.SearchResultsTitle>{item.title}</Header.SearchResultsTitle>
+						</Header.SearchResultsWrapper>
+					</a>
+				</Link>
+			)
+		})
+		setSearchResults(links)
+	}, [searchTerm, allProducts])
 
 	const handleDropdownClose = () => {
 		setIsDroppedDown(false)

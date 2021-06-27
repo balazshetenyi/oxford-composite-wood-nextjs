@@ -7,12 +7,18 @@ function ShopContextProvider({ children }) {
 	const [cart, setCart] = useState(null)
 	const [isCartEmpty, setIsCartEmpty] = useState(true)
 	const [totalQuantity, setTotalQuantity] = useState(0)
+	const [allProducts, setAllProducts] = useState(null)
 	// const [isCartOpen, setIsCartOpen] = useState(false)
 
 	// Create a checkout ID on render
 	useEffect(async () => {
 		const cart = await JSON.parse(window.localStorage.getItem("cart"))
 		setCart(cart)
+		async function getAllProductsForSearchComponent() {
+			const products = await Storefront.product.fetchAll()
+			setAllProducts(products)
+		}
+		getAllProductsForSearchComponent()
 	}, [])
 
 	// Follow cart state
@@ -45,8 +51,6 @@ function ShopContextProvider({ children }) {
 		window.localStorage.setItem("cart", JSON.stringify(cart))
 		setCart(JSON.parse(window.localStorage.getItem("cart")))
 	}
-	// const lo = JSON.parse(cart)
-	console.log(cart)
 
 	// Remove item from cart by ID
 	async function removeItemFromCart(lineItemId) {
@@ -81,17 +85,12 @@ function ShopContextProvider({ children }) {
 				updateItemsInCart,
 				isCartEmpty,
 				totalQuantity,
+				allProducts,
 			}}
 		>
 			{children}
 		</ShopContext.Provider>
 	)
 }
-
-// export async function getServerSideProps() {
-// 	const res = await Storefront.product.fetchAll()
-
-// 	return { props: { products: JSON.parse(JSON.stringify(res)) } }
-// }
 
 export { ShopContextProvider, ShopContext }

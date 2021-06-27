@@ -1,19 +1,21 @@
 import styled from "styled-components"
 import { LIGHT, DARK } from "../../../constants/colors"
 
-export const Background = styled.section`
-	background: url(${({ src }) => (src ? `/images/bg/${src}.jpg` : "/images/bg/bg-01.png")}) left /
-		cover no-repeat;
+export const Section = styled.section`
+	background: url(${({ src }) => (src ? `/images/bg/${src}.jpg` : "/images/bg/bg-01.png")}) left / cover no-repeat;
 	background-color: ${DARK};
 	background-blend-mode: hard-light;
 	display: flex;
 	align-items: center;
 	height: calc(100vh - 6em);
+	//flex: 1;
 `
 
 export const Container = styled.div`
 	width: 100%;
 	text-align: center;
+	/* position: relative;
+	height: calc(100vh - 6em); */
 `
 
 export const Title = styled.h1`

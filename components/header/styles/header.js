@@ -107,6 +107,7 @@ export const Logo = styled.img`
 
 export const HeaderLink = styled.a`
 	font-size: 1.3em;
+	font-weight: 600;
 	text-decoration: none;
 	text-transform: capitalize;
 	color: ${DARK};
@@ -149,6 +150,7 @@ export const ProductRoutes = styled.div`
 
 export const Search = styled.div`
 	display: inline-block;
+	z-index: 1;
 	height: 24px;
 
 	@media (max-width: 900px) {
@@ -193,6 +195,7 @@ export const SearchResults = styled.div`
 	position: absolute;
 	top: 410px;
 	width: 100%;
+	z-index: 1;
 
 	& a {
 		text-decoration: none;
