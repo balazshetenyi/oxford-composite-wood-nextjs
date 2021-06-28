@@ -13,7 +13,12 @@ export const DECKING = {
 }
 
 export const CLADDING = {
-	oneSquare: 2.6,
+	small: {
+		oneSquare: 3.2,
+	},
+	large: {
+		oneSquare: 2.6,
+	},
 	length: {
 		small: 2400,
 		medium: 2900,
