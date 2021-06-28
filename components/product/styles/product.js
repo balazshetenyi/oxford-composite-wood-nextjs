@@ -256,10 +256,13 @@ export const GoToCheckout = styled(AddToCart)`
 	color: ${LIGHT};
 `
 export const MorePaymentOptions = styled.a``
-export const Description = styled.p`
+export const Description = styled.div`
 	line-height: 1.5;
 	letter-spacing: 0.5px;
 	margin-top: 0;
+	margin-bottom: 2em;
+	max-height: 600px;
+	overflow: auto;
 `
 export const Subtitle = styled.h2`
 	text-align: center;

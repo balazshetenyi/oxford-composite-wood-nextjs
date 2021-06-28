@@ -1,5 +1,10 @@
 export const DECKING = {
-	oneSquare: 2.8,
+	small: {
+		oneSquare: 2.8,
+	},
+	large: {
+		oneSquare: 2.3,
+	},
 	length: {
 		small: 2400,
 		medium: 2900,

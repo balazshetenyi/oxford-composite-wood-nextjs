@@ -66,8 +66,16 @@ export function ProductContainer({ product, collections }) {
 
 	// Get the needed material from calculator
 	function handleSubmit() {
-		// Get the measurements
-		const material = product.productType.toLowerCase().includes("decking") ? DECKING.oneSquare : CLADDING.oneSquare
+		let material
+
+		if (length == 2900) {
+			// Get the measurements
+			material = product.productType.toLowerCase().includes("decking") ? DECKING.large.oneSquare : CLADDING.large.oneSquare
+		} else {
+			// Get the measurements
+			material = product.productType.toLowerCase().includes("decking") ? DECKING.small.oneSquare : CLADDING.small.oneSquare
+		}
+		
 		// Get the quantity needed
 		const quantity = GetQuantity(squareMeter, material)
 		// Set the quantity
@@ -85,28 +93,9 @@ export function ProductContainer({ product, collections }) {
 		setAccessoriesToOffer(newAccessories)
 	}
 
-	// async function addItemToCart(item, quantity) {
-	// 	const storage = window.localStorage
-	// 	let checkoutId = window.localStorage.getItem("checkoutId")
-
-	// 	if (!checkoutId) {
-	// 		const checkout = await Storefront.checkout.create()
-	// 		console.log("in here")
-	// 		checkoutId = checkout.id
-	// 		storage.setItem("checkoutId", checkoutId)
-	// 	}
-
-	// 	// const cart = await Storefront.checkout.addLineItems(checkoutId, [
-	// 	// 	{
-	// 	// 		variantId: item.variants[0].id,
-	// 	// 		quantity,
-	// 	// 	},
-	// 	// ])
-
-	// 	// storage.setItem("cart", JSON.stringify(cart))
-
-	// 	// console.log(cart)
-	// }
+	function createMarkup(desc) {
+		return {__html: desc};
+	}
 
 	return (
 		<Product>
@@ -155,7 +144,7 @@ export function ProductContainer({ product, collections }) {
 					</Product.ImageWrapper>
 				</Product.ImageContainer>
 				{/* ----------- */}
-				<Product.Description>{product.description}</Product.Description>
+				<Product.Description dangerouslySetInnerHTML={createMarkup(product.descriptionHtml)}></Product.Description>
 				{/* Filter products */}
 				<Product.Filter>
 					{/* Filter by color */}
